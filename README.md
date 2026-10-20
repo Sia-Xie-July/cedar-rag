@@ -227,12 +227,27 @@ training condition from T1. It cannot establish whether 19:00 is within the
 permitted access hours. Q4 cannot establish a wavelength. Missing information
 is stated explicitly rather than filled in from other sources.
 
+## Individual reflections
+
+### Tong Zhou
+
+In this workflow, a question is converted into an embedding, compared with
+document vectors, and paired with the top two passages to generate a cited
+answer. Q4 showed me that similarity does not establish answerability. The
+embedding retriever selected T1 and A2, but these passages describe training
+and staffing requirements, not the laser’s wavelength. The answer therefore
+correctly stated that the wavelength could not be determined from the supplied
+evidence. Retrieving related text is only one step; each answer still needs an
+evidence check.
+
+Next, I would test additional answerable and unanswerable questions using the
+same six passages. I would compare the current prompt with one requiring
+explicit identification of missing evidence, checking whether it reduces
+unsupported answers without rejecting questions the passages can answer.
+
 ## Before submission
 
-Tong Zhou and Sia Xie must each write their own reflection of at most 150 words:
-explain the question-to-cited-answer path, one observed limitation, and one
-change to test next. The handout explicitly asks students to write these
-personal explanations themselves; they have not been generated here.
+Sia Xie's individual reflection (at most 150 words) still needs to be added.
 Review the evidence judgments and answer audits yourselves before submitting
 the repository link to the course sign-up sheet.
 
