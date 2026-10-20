@@ -245,7 +245,7 @@ same six passages. I would compare the current prompt with one requiring
 explicit identification of missing evidence, checking whether it reduces
 unsupported answers without rejecting questions the passages can answer.
 
-## Sia Xie
+### Sia Xie
 
 In this project, a question is encoded and then compared with the six passages. The retriever ranks them and then pass the top passages to the answer step. Later, the answer step cites the chunk IDs that support each claim. 
 
