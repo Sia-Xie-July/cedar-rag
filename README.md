@@ -245,9 +245,10 @@ same six passages. I would compare the current prompt with one requiring
 explicit identification of missing evidence, checking whether it reduces
 unsupported answers without rejecting questions the passages can answer.
 
-## Before submission
+## Sia Xie
 
-Sia Xie's individual reflection (at most 150 words) still needs to be added.
-Review the evidence judgments and answer audits yourselves before submitting
-the repository link to the course sign-up sheet.
+In this project, a question is encoded and then compared with the six passages. The retriever ranks them and then pass the top passages to the answer step. Later, the answer step cites the chunk IDs that support each claim. 
 
+One limitation I noticed from Q1: the embedding retriever found the laser staffing rule but ranked the general access-hours rule fourth, so the top-two context could not establish whether 19:00 was permitted. This showed me that a plausible similarity ranking could also omit necessary evidence. 
+
+For next potential steps, I would test a hybrid ranking that combines embedding similarity with keyword overlap, then compare coverage and citation accuracy on both answerable and unanswerable questions.
