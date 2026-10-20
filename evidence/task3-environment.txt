@@ -1,0 +1,15 @@
+Run date: 2026-10-20 (America/New_York)
+Source: independent local run, not borrowed output
+Platform: Darwin arm64
+Python==3.12.1
+numpy==2.5.4
+sentence-transformers==6.1.0
+torch==2.14.1
+transformers==5.20.2
+Embedding model: sentence-transformers/all-MiniLM-L6-v2
+Model revision: 1110a243fdf4706b3f48f1d95db1a4f5529b4d41
+Device: cpu
+Answer generator: codex-cli 0.155.1 (default model selection)
+Retrieval command: HF_HOME="$PWD/.cache/huggingface" .venv/bin/python compare_retrieval.py
+Offline rerun: add HF_HUB_OFFLINE=1 after the initial download
+Dependencies: requirements.txt (full local pip freeze)

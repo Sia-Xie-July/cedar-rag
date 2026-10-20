@@ -1,0 +1,5 @@
+question_id,keyword_top_ids,keyword_scores,embedding_top_ids,embedding_scores,required_ids,keyword_evidence_complete,embedding_evidence_complete,observation
+Q1,A1;A2,3;2,A2;T1,0.68644569;0.58195282,A1;A2,true,false,"Keyword coverage=2/2 (A1,A2); embedding coverage=1/2 (A2 only). Embeddings miss access hours; T1 adds a training condition."
+Q2,A2;B1,2;1,A2;T1,0.58519333;0.43476060,A2,true,true,"Both coverage=1/1. A2 ranks first: keyword=2 (laser,present); embedding=0.58519333. The paraphrase succeeds without a literal match for another person."
+Q3,T1;A2,2;1,T1;B1,0.74202738;0.47119524,T1,true,true,"Both coverage=1/1. T1 ranks first: keyword=2 (laser,must); embedding=0.74202738. Embeddings retrieve renewal for refresh my qualification, but keyword also succeeds."
+Q4,A2;B1,1;1,T1;A2,0.34772122;0.32082713,absent,false,false,"Answer absent in all six sources; coverage ratio not applicable. Embedding T1=0.34772122 and A2=0.32082713 are related rules, not wavelength evidence. Fixed top-k still returns two passages."
