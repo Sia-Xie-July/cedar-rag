@@ -1,0 +1,15 @@
+Task 3: Q1 embedding k experiment (actual reruns).
+Question: May a trained graduate student operate the laser alone at 19:00?
+Required evidence: A1;A2
+
+k=1 | selected=A2 | required_coverage=1/2 | evidence_complete=False
+[A2] score=0.68644569 | The laser room requires two trained people to be present whenever the laser is operating, including during general laboratory access hours.
+
+k=2 | selected=A2;T1 | required_coverage=1/2 | evidence_complete=False
+[A2] score=0.68644569 | The laser room requires two trained people to be present whenever the laser is operating, including during general laboratory access hours.
+[T1] score=0.58195282 | Laser training must be renewed every 12 months. A current training record is required before operating the laser.
+
+k=3 | selected=A2;T1;B1 | required_coverage=1/2 | evidence_complete=False
+[A2] score=0.68644569 | The laser room requires two trained people to be present whenever the laser is operating, including during general laboratory access hours.
+[T1] score=0.58195282 | Laser training must be renewed every 12 months. A current training record is required before operating the laser.
+[B1] score=0.53269603 | Laser room bookings are limited to two hours per session. Reserve the room through the equipment calendar.

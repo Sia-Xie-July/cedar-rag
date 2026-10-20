@@ -1,0 +1,41 @@
+CEDAR-RAG embedding retriever
+model=sentence-transformers/all-MiniLM-L6-v2
+device=cpu
+versions: python=3.12.1, sentence-transformers=6.1.0, numpy=2.5.4, torch=2.14.1, transformers=5.20.2
+document_matrix_shape=(6, 384)
+Document vectors (first 12 coordinates):
+A1 | access.txt | length=1.00000010 | approximately_1=True | first_12=[-0.0039, 0.0188, 0.0218, -0.0179, -0.0058, -0.0612, -0.0891, 0.0321, -0.0584, 0.0111, 0.0031, -0.0123]
+A2 | access.txt | length=1.00000004 | approximately_1=True | first_12=[0.0298, -0.0435, -0.0289, 0.0303, -0.0507, -0.0310, 0.0361, -0.0391, -0.0322, -0.0424, 0.0498, 0.0019]
+T1 | training.txt | length=0.99999995 | approximately_1=True | first_12=[0.0063, -0.0708, 0.0345, 0.0146, -0.1167, -0.0114, -0.0708, -0.0761, -0.0806, -0.0767, 0.0325, 0.1357]
+T2 | training.txt | length=1.00000002 | approximately_1=True | first_12=[0.0447, -0.0044, 0.0042, -0.0058, 0.0211, -0.0151, -0.0108, -0.0301, -0.0191, -0.0234, 0.0280, -0.0367]
+B1 | booking.txt | length=1.00000002 | approximately_1=True | first_12=[0.0856, -0.0417, -0.0194, 0.0377, -0.0668, -0.0053, -0.0260, -0.0618, -0.0186, -0.0023, -0.0050, 0.0659]
+B2 | booking.txt | length=1.00000008 | approximately_1=True | first_12=[0.0673, 0.0924, -0.0079, 0.0634, -0.0105, 0.0043, -0.0020, -0.0750, 0.0667, 0.0378, -0.0040, 0.0335]
+Display note: only the first 12 coordinates are printed; all 384 coordinates are used in retrieval.
+
+Question 1: May a trained graduate student operate the laser alone at 19:00?
+question_vector_shape=(384,)
+question_vector_length=1.00000003 | approximately_1=True
+question_first_12=[0.0485, 0.0060, -0.0148, -0.0017, -0.0642, -0.0427, 0.0008, -0.0575, -0.0771, -0.0306, 0.0749, 0.0967]
+All similarity scores (descending):
+A2 | access.txt | score=0.68644569
+T1 | training.txt | score=0.58195282
+B1 | booking.txt | score=0.53269603
+A1 | access.txt | score=0.37424891
+T2 | training.txt | score=0.27045223
+B2 | booking.txt | score=0.12873961
+Selected passages (top k=2, with no relevance threshold):
+ID: A2
+Filename: access.txt
+Text: The laser room requires two trained people to be present whenever the laser is operating, including during general laboratory access hours.
+ID: T1
+Filename: training.txt
+Text: Laser training must be renewed every 12 months. A current training record is required before operating the laser.
+Q1 top-passage coordinate-product inspection:
+top_id=A2
+first_12_coordinate_products=[0.00144752, -0.00026310, 0.00042619, -0.00005041, 0.00325775, 0.00132396, 0.00002805, 0.00225028, 0.00248297, 0.00129726, 0.00373008, 0.00018095]
+first_12_subtotal=0.01611150
+remaining_372_subtotal=0.67033419
+full_similarity_dot_product=0.68644569
+direct_cosine_from_vector_lengths=0.68644564
+absolute_score_cosine_difference=0.0000000516
+scores_agree_within_tolerance_1e-06=True

@@ -1,9 +1,24 @@
 # CEDAR-RAG
 
-A small teaching project that retrieves Cedar Lab passages with exact keyword
-overlap. Despite the project name, this version does not generate answers and
-does not use semantic search, stemming, or synonyms. It uses only Python's
-standard library.
+A small teaching project comparing exact keyword overlap with real MiniLM
+embeddings, followed by a manual handoff for cited answers and claim audits.
+Partners: **Tong Zhou and Sia Xie**.
+
+## Setup
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+export HF_HOME="$PWD/.cache/huggingface"
+```
+
+The first embedding run downloads the model and needs internet access. Later
+runs can set `HF_HUB_OFFLINE=1`. Keyword retrieval needs only the standard library.
+The local Tasks 3–4 run used Python 3.12.1, sentence-transformers 6.1.0,
+NumPy 2.5.4, PyTorch 2.14.1, and transformers 5.20.2 on CPU.
+`requirements.txt` pins the installed packages; `evidence/task3-environment.txt`
+records the model revision. The original Task 2 environment remains in
+`INSTALLED_VERSIONS.txt` (Python 3.13.7).
 
 ## Run it
 
@@ -134,4 +149,90 @@ Key code locations in `embedding_retrieve.py`:
 The complete unedited Q1 report is in
 `evidence/embedding-inspection.txt`. Its actual top two IDs are `A2` and `T1`;
 the ranking was not adjusted.
+
+## Task 3: comparison and k experiment
+
+```bash
+HF_HOME="$PWD/.cache/huggingface" HF_HUB_OFFLINE=1 .venv/bin/python compare_retrieval.py
+.venv/bin/python -m unittest -v
+```
+
+For a first run with no cached model, omit `HF_HUB_OFFLINE=1`.
+The script loads one CPU model, encodes the six documents once, and reuses them
+for Q1–Q4 and the Q1 k experiment. It imports the existing retrievers without
+changing their scoring rules. IDs and filenames remain metadata. Assertions
+check finite vectors, (6, 384) document and (384,) query shapes, unit lengths,
+and agreement between dot products and direct cosine within 1e-6.
+
+`evidence/retrieval-runs.txt` contains all six rankings, keyword matches,
+embedding vectors, versions, and selected passages for each question.
+`evidence/results-unjudged.csv` preserves measurements with the three judgment
+fields blank. `results.csv` contains the subsequent evidence judgments; rerunning
+the script does not overwrite that file or the saved answers. Scores and IDs
+use semicolons in corresponding rank order; scores from different methods have
+different scales and must not be compared numerically.
+
+| Question | Keyword top 2 | Embedding top 2 | Required evidence coverage: keyword / embedding |
+| --- | --- | --- | --- |
+| Q1 | A1, A2 | A2, T1 | 2/2 / 1/2 |
+| Q2 | A2, B1 | A2, T1 | 1/1 / 1/1 |
+| Q3 | T1, A2 | T1, B1 | 1/1 / 1/1 |
+| Q4 | A2, B1 | T1, A2 | Not applicable: answer absent |
+
+Q1 demonstrates incomplete retrieval: A2 supports the operating condition,
+but the embedding top two omit A1's time range. The keyword score for A1 is 3:
+the distinct matches are `00`, `graduate`, and `trained` (repetition adds nothing).
+For Q2, A2 ranks first with embedding score 0.58519333 and keyword score 2
+(`laser`, `present`). For Q3, T1 ranks first with embedding score 0.74202738,
+matching the intended renewal rule despite the question's paraphrase; keyword
+retrieval also succeeds with `laser` and `must`. These examples do not establish
+that embeddings always outperform word overlap.
+
+Q4's nearest embedding passages are T1 (0.34772122) and A2 (0.32082713).
+Neither provides a wavelength, and none of the six sources specifies one.
+The embedding retriever always returns the top k, with no relevance threshold;
+a positive score measures alignment rather than answerability. Both completeness
+fields are therefore false, and no coverage ratio is assigned to Q4.
+
+`evidence/k-experiment.txt` records actual Q1 reruns at k=1, 2, and 3.
+They return A2; A2,T1; and A2,T1,B1, respectively. All have coverage 1/2.
+T1 adds the current-training condition. B1 adds a two-hour booking limit and
+calendar procedure, which do not resolve the question's solo-operation or
+access-time evidence gap. A1 ranks fourth (0.37424891), so increasing k to 3
+still does not recover all required evidence. This is a four-question classroom
+check, not a general performance estimate.
+
+## Task 4: evidence-only answers and audits
+
+The script writes `evidence/q1-prompt.txt` and `evidence/q4-prompt.txt`, each
+containing only the handout's answer instruction, the question, and its two
+selected embedding passages. Each was submitted to a fresh ephemeral Codex
+conversation from an empty directory, with no project attachment, shell tools
+disabled, and browsing disabled. The event trace confirms no tool calls.
+Generation is a separate manual handoff, not part of the retrieval program.
+To repeat it, paste each prompt into a separate fresh conversation with no
+project files and audit the resulting answer against exactly those passages.
+
+- `evidence/q1-answer-original.md`: initial response, preserved unedited.
+- `evidence/q1-prompt-revised.txt` and `evidence/q1-answer-revised.md`: one
+  instruction revision and one fresh rerun with the same A2 and T1 passages.
+- `evidence/q1-answer-audit.md`: claim checks and the original failure: it
+  omitted the missing access-hour range. The revision explicitly acknowledges it.
+- `evidence/q4-answer-original.md` and `evidence/q4-answer-audit.md`: the answer
+  says wavelength is unspecified; its initial audit passes, so no revision.
+- `evidence/answer-generation.json`: generation events and input/output hashes.
+
+The final Q1 answer prohibits solo operation based on A2 and describes the
+training condition from T1. It cannot establish whether 19:00 is within the
+permitted access hours. Q4 cannot establish a wavelength. Missing information
+is stated explicitly rather than filled in from other sources.
+
+## Before submission
+
+Tong Zhou and Sia Xie must each write their own reflection of at most 150 words:
+explain the question-to-cited-answer path, one observed limitation, and one
+change to test next. The handout explicitly asks students to write these
+personal explanations themselves; they have not been generated here.
+Review the evidence judgments and answer audits yourselves before submitting
+the repository link to the course sign-up sheet.
 
